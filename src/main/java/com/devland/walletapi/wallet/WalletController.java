@@ -7,11 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*", allowedHeaders="*")
 @RestController
 public class WalletController {
     @Autowired
@@ -31,6 +33,7 @@ public class WalletController {
         return ResponseEntity.status(HttpStatus.OK).body(walletResponseDTOList);    
     }
     
+    // @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/wallets")
     public ResponseEntity<WalletResponseDTO> createWallet(@RequestBody WalletRequestDTO walletRequestDTO){
         Wallet newWallet = Wallet.builder().walletName(walletRequestDTO.getWalletName()).build();
