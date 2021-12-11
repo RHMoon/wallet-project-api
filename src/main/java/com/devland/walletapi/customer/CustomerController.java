@@ -56,7 +56,7 @@ public class CustomerController {
                                .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).createdAt(customerRequestDTO.getCreatedAt()).build();
         Customer saveCustomer = this.customerService.createCustomer(newCustomer);
         Wallet newWallet = this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").balance(50000).build());
-        this.transactionHistoryService.createWalletOpeningTransactionHistory(newWallet);
+        // this.transactionHistoryService.createWalletOpeningTransactionHistory(newWallet);
         Wallet updateWallet = this.walletService.findById(newWallet.getWalletId());
         List<Wallet> updateWalletList = List.of(updateWallet);
         CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder().id(saveCustomer.getId()).firstName(saveCustomer.getFirstName()).lastName(saveCustomer.getLastName())
