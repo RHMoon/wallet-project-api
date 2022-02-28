@@ -17,12 +17,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*", allowedHeaders="*")
 @RestController
 public class CustomerController {
     @Autowired
@@ -54,7 +56,7 @@ public class CustomerController {
                                .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).createdAt(customerRequestDTO.getCreatedAt()).build();
         Customer saveCustomer = this.customerService.createCustomer(newCustomer);
         Wallet newWallet = this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").balance(50000).build());
-        this.transactionHistoryService.createWalletOpeningTransactionHistory(newWallet);
+        // this.transactionHistoryService.createWalletOpeningTransactionHistory(newWallet);
         Wallet updateWallet = this.walletService.findById(newWallet.getWalletId());
         List<Wallet> updateWalletList = List.of(updateWallet);
         CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder().id(saveCustomer.getId()).firstName(saveCustomer.getFirstName()).lastName(saveCustomer.getLastName())
@@ -82,6 +84,7 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    
     @PostMapping("/customers/{customerId}/transfer/{walletId}")
     public ResponseEntity<Void> tansferWallet(@PathVariable("customerId") Long customerId, @PathVariable("walletId") Long fromWalletId, @RequestBody TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
         this.transactionHistoryService.createTransferTransactionHistory(fromWalletId, transactionHistoryRequestDTO);
